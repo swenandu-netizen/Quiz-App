@@ -1,72 +1,90 @@
 let currentQuestionIndex = 0;
 let quizData = [];
 
-// यह फंक्शन तब चलेगा जब यूज़र किसी टॉपिक के बटन पर क्लिक करेगा
-function startQuiz(jsonUrl) {
-    // 1. टॉपिक वाले बॉक्स को छिपा दें और क्विज़ वाले बॉक्स को दिखा दें
-    document.getElementById('category-box').style.display = 'none';
-    document.getElementById('quiz-container').style.display = 'block';
+// आपका लाइव GitHub Raw लिंक
+const rawJSON_URL = "https://raw.githubusercontent.com/swenandu-netizen/Quiz-App/main/j.json"; 
 
-    // 2. पुराने सवाल और इंडेक्स को रीसेट करें (ताकि क्विज़ शुरू से चले)
-    currentQuestionIndex = 0;
-    quizData = [];
-    document.getElementById('options').innerHTML = '';
-    document.getElementById('question').innerText = "सवाल लोड हो रहा है...";
-
-    // 3. जो लिंक बटन से मिला है, वहाँ से डेटा Fetch करें
-    fetch(jsonUrl)
-        .then(response => response.json())
-        .then(data => {
-            quizData = data[""] || data; // JSON फॉर्मेट के हिसाब से डेटा सेट करें
+// 1. GitHub से डेटा मंगाना
+fetch(rawJSON_URL)
+    .then(response => response.json())
+    .then(data => {
+        // डेटा को सेट करना (अगर डेटा {"": [...]} फॉर्मेट में है, या सीधे [...] फॉर्मेट में है)
+        quizData = data[""] || data; 
+        
+        if(quizData && quizData.length > 0) {
             loadQuestion(); 
-        })
-        .catch(error => {
-            console.error('डेटा लोड करने में गलती हुई:', error);
-            document.getElementById('question').innerText = "एरर: डेटा लोड नहीं हो सका!";
-        });
-}
+        } else {
+            document.getElementById('question').innerText = "क्विज़ में कोई सवाल नहीं मिला!";
+        }
+    })
+    .catch(error => {
+        console.error('डेटा लोड करने में गलती हुई:', error);
+        document.getElementById('question').innerText = "एरर: कृपया अपना इंटरनेट चेक करें या लिंक जांचें!";
+    });
 
-// सवाल दिखाने का फंक्शन
+// 2. स्क्रीन पर सवाल और ऑप्शन्स दिखाना
 function loadQuestion() {
     const questionElement = document.getElementById('question');
     const optionsElement = document.getElementById('options');
     
+    // पुराना डेटा हटाएँ
     optionsElement.innerHTML = ''; 
 
+    // नया सवाल सेट करें
     let currentData = quizData[currentQuestionIndex];
     questionElement.innerText = currentData.q; 
 
+    // हर ऑप्शन के लिए बटन बनाएँ
     currentData.options.forEach(option => {
         const button = document.createElement('button');
         button.innerText = option;
-        button.style.margin = '5px';
-        button.style.padding = '10px';
-        button.style.cursor = 'pointer';
+        button.classList.add('btn'); // HTML में जो डिज़ाइन बनाया है, उसे लगाएँ
         
         button.onclick = () => checkAnswer(option, currentData.answer, button);
         optionsElement.appendChild(button);
     });
 }
 
-// जवाब चेक करने का फंक्शन
+// 3. जवाब चेक करना
 function checkAnswer(selectedOption, correctAnswer, buttonElement) {
+    // सबसे पहले सारे बटनों को लॉक (Disable) कर दें ताकि यूज़र दो बार क्लिक न कर सके
+    const allButtons = document.querySelectorAll('.btn');
+    allButtons.forEach(btn => btn.disabled = true);
+
+    // अगर जवाब सही है
     if (selectedOption === correctAnswer) {
-        buttonElement.style.backgroundColor = 'lightgreen';
-        alert("बिल्कुल सही जवाब!");
-    } else {
-        buttonElement.style.backgroundColor = 'lightcoral';
-        alert("गलत जवाब! सही जवाब है: " + correctAnswer);
+        buttonElement.style.backgroundColor = '#d4edda'; // हरा रंग
+        buttonElement.style.borderColor = '#28a745';
+        buttonElement.style.color = '#155724';
+    } 
+    // अगर जवाब गलत है
+    else {
+        buttonElement.style.backgroundColor = '#f8d7da'; // लाल रंग
+        buttonElement.style.borderColor = '#dc3545';
+        buttonElement.style.color = '#721c24';
+        
+        // यूज़र को सही जवाब दिखाने के लिए सही वाले बटन को हरा कर दें
+        allButtons.forEach(btn => {
+            if(btn.innerText === correctAnswer) {
+                btn.style.backgroundColor = '#d4edda';
+                btn.style.borderColor = '#28a745';
+                btn.style.color = '#155724';
+            }
+        });
     }
     
+    // 2 सेकंड रुकने के बाद अगले सवाल पर जाएँ
     currentQuestionIndex++;
     if (currentQuestionIndex < quizData.length) {
-        setTimeout(loadQuestion, 1000); 
+        setTimeout(loadQuestion, 2000); // 2000 मिलीसेकंड = 2 सेकंड
     } else {
-        // क्विज़ खत्म होने पर वापस टॉपिक चुनने का ऑप्शन दिखाएँ
-        document.getElementById('quiz-container').innerHTML = `
-            <h2>क्विज़ समाप्त!</h2>
-            <button onclick="location.reload()" style="padding: 10px; margin-top: 20px;">दूसरा क्विज़ खेलें</button>
-        `;
+        // जब सारे सवाल खत्म हो जाएँ
+        setTimeout(() => {
+            document.getElementById('quiz-container').innerHTML = `
+                <h2>क्विज़ समाप्त!</h2>
+                <p>आपने बहुत अच्छा खेला।</p>
+                <button class="btn" onclick="location.reload()" style="background-color: #007bff; color: white;">फिर से खेलें</button>
+            `;
+        }, 2000);
     }
 }
-
