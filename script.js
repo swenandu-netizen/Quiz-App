@@ -2,7 +2,7 @@ let currentQuestionIndex = 0;
 let quizData = [];
 
 // आपका लाइव GitHub Raw लिंक
-const rawJSON_URL = "https://raw.githubusercontent.com/swenandu-netizen/Quiz-App/main/j.json"; 
+const rawJSON_URL = "j.json"; 
 
 // 1. GitHub से डेटा मंगाना
 fetch(rawJSON_URL)
