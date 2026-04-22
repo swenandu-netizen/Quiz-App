@@ -3,19 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>मल्टीपल टॉपिक क्विज़</title>
+    <title>मेरा क्विज़ ऐप</title>
+    <style>
+        /* क्विज़ को सुंदर बनाने के लिए थोड़ा सा डिज़ाइन */
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #f4f4f9; 
+            padding: 20px; 
+            margin: 0;
+        }
+        #quiz-container { 
+            max-width: 600px; 
+            margin: 20px auto; 
+            background: white; 
+            padding: 20px; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+            text-align: center; 
+        }
+        h1 { color: #333; }
+        h2 { color: #555; font-size: 22px; margin-bottom: 20px; }
+        .btn { 
+            display: block; 
+            width: 100%; 
+            margin: 10px 0; 
+            padding: 12px; 
+            font-size: 16px; 
+            font-weight: bold;
+            color: #333;
+            cursor: pointer; 
+            border: 2px solid #ddd; 
+            border-radius: 5px; 
+            background-color: #fff; 
+            transition: 0.3s; 
+        }
+        .btn:hover { 
+            background-color: #e9ecef; 
+        }
+        .btn:disabled {
+            cursor: not-allowed;
+        }
+    </style>
 </head>
 <body>
-    <div id="category-box" style="text-align: center; margin-top: 50px;">
-        <h2>क्विज़ का विषय चुनें:</h2>
-        <button onclick="startQuiz('https://raw.githubusercontent.com/swenandu-netizen/Quiz-App/28b33a35cf8ac7935854e26198662f4cc84e6311/j.json')" style="padding: 10px; margin: 5px;">Math Quiz</button>
-        <button onclick="startQuiz('https://raw.githubusercontent.com/.../ipl.json')" style="padding: 10px; margin: 5px;">IPL Quiz</button>
-    </div>
 
-    <div id="quiz-container" style="max-width: 500px; margin: 50px auto; text-align: center; font-family: Arial; display: none;">
+    <div id="quiz-container">
         <h1>मज़ेदार क्विज़</h1>
         <h2 id="question">सवाल लोड हो रहा है...</h2>
-        <div id="options"></div>
+        <div id="options">
+            </div>
     </div>
 
     <script src="script.js"></script>
