@@ -3,42 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>मेरा क्विज़ ऐप</title>
+    <title>प्रीमियम क्विज़ ऐप</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        /* क्विज़ को सुंदर बनाने के लिए थोड़ा सा डिज़ाइन */
-        body { 
-            font-family: Arial, sans-serif; 
-            background-color: #f4f4f9; 
-            padding: 20px; 
+        * {
+            box-sizing: border-box;
             margin: 0;
+            padding: 0;
         }
-        #quiz-container { 
-            max-width: 600px; 
-            margin: 20px auto; 
-            background: white; 
-            padding: 20px; 
-            border-radius: 10px; 
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
-            text-align: center; 
-        }
-        h1 { color: #333; }
-        h2 { color: #555; font-size: 22px; margin-bottom: 20px; }
-        .btn { 
-            display: block; 
-            width: 100%; 
-            margin: 10px 0; 
-            padding: 12px; 
-            font-size: 16px; 
-            font-weight: bold;
+        body {
+            font-family: 'Poppins', sans-serif;
+            /* सुंदर ग्रेडिएंट बैकग्राउंड (नीला और पर्पल) */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
             color: #333;
-            cursor: pointer; 
-            border: 2px solid #ddd; 
-            border-radius: 5px; 
-            background-color: #fff; 
-            transition: 0.3s; 
         }
-        .btn:hover { 
-            background-color: #e9ecef; 
+        #quiz-container {
+            background: #ffffff;
+            width: 90%;
+            max-width: 450px;
+            padding: 35px 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transition: 0.3s;
+        }
+        h1 {
+            font-size: 24px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 15px;
+        }
+        #question {
+            font-size: 19px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #34495e;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: inherit;
+            color: #495057;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        /* बटन पर माउस ले जाने का एनिमेशन */
+        .btn:hover:not(:disabled) {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(102, 126, 234, 0.4);
         }
         .btn:disabled {
             cursor: not-allowed;
@@ -48,7 +79,7 @@
 <body>
 
     <div id="quiz-container">
-        <h1>मज़ेदार क्विज़</h1>
+        <h1>✨ मज़ेदार क्विज़ ✨</h1>
         <h2 id="question">सवाल लोड हो रहा है...</h2>
         <div id="options">
             </div>
