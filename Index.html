@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Local JSON Quiz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body { font-family: Arial; padding: 15px; background: #f5f5f5; }
+    h2 { text-align:center; }
+
+    select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+    }
+
+    .card {
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    button {
+      width: 100%;
+      margin: 5px 0;
+      padding: 10px;
+      border: none;
+      background: #eee;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .correct { background: #c8f7c5 !important; }
+    .wrong { background: #f7c5c5 !important; }
+
+    #score {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<h2>📘 JSON Quiz (Local)</h2>
+
+<select id="daySelect" onchange="loadDay()">
+  <option value="">Loading...</option>
+</select>
+
+<div id="quiz"></div>
+<div id="score"></div>
+
+<script>
+
+// 🔥 IMPORTANT: space encoded path
+const DATA_URL = "./quiz%20with%20json%20file/j.json";
+
+let allData = {};
+let score = 0;
+let total = 0;
+
+// ✅ Load JSON file
+fetch(DATA_URL)
+.then(res => res.json())
+.then(data => {
+
+  allData = data;
+
+  let dropdown = document.getElementById("daySelect");
+  dropdown.innerHTML = '<option value="">Select Day</option>';
+
+  // auto create dropdown
+  for(let day in data){
+    dropdown.innerHTML += `<option value="${day}">${day}</option>`;
+  }
+
+})
+.catch(err => {
+  alert("JSON load error! Check path or server mode.");
+  console.error(err);
+});
+
+
+// ✅ Load Quiz
+function loadDay(){
+
+  let day = document.getElementById("daySelect").value;
+  if(!day) return;
+
+  score = 0;
+  total = 0;
+
+  let quiz = allData[day];
+  let html = "";
+
+  quiz.forEach((q, i) => {
+
+    total++;
+
+    html += `<div class="card">
+      <p><b>Q${i+1}:</b> ${q.q}</p>`;
+
+    q.options.forEach(opt => {
+      html += `<button onclick="checkAns(this,'${q.answer}')">${opt}</button>`;
+    });
+
+    html += `<p class="result"></p></div>`;
+  });
+
+  document.getElementById("quiz").innerHTML = html;
+}
+
+
+// ✅ Check Answer
+function checkAns(btn, correct){
+
+  let selected = btn.innerText.trim();
+  let parent = btn.parentElement;
+  let buttons = parent.querySelectorAll("button");
+  let result = parent.querySelector(".result");
+
+  buttons.forEach(b => b.disabled = true);
+
+  if(selected === correct.trim()){
+    btn.classList.add("correct");
+    result.innerHTML = "✅ Correct";
+    score++;
+  } else {
+    btn.classList.add("wrong");
+
+    buttons.forEach(b => {
+      if(b.innerText.trim() === correct.trim()){
+        b.classList.add("correct");
+      }
+    });
+
+    result.innerHTML = "❌ Wrong";
+  }
+
+  document.getElementById("score").innerHTML =
+    `Score: ${score} / ${total}`;
+}
+
+</script>
+
+</body>
+</html>
