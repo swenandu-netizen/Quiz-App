@@ -183,5 +183,48 @@
     });
   }
 </script>
+    <div class="floating-menu">
+  <button class="fab-item" onclick="goHome()" title="Home">🏠</button>
+  <button id="installBtn" class="fab-item" style="display:none;" title="Install App">📥</button>
+  <button class="fab-item" onclick="shareApp()" title="Share">📢</button>
+  <button class="fab-item" onclick="window.location.reload()" title="Refresh">🔄</button>
+</div>
+
+<script>
+  let deferredPrompt;
+  const installBtn = document.getElementById('installBtn');
+
+  // Install Prompt ko capture karna
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    // Install button ko dikhao
+    installBtn.style.display = 'flex';
+  });
+
+  installBtn.addEventListener('click', async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        console.log('User installed the app');
+      }
+      deferredPrompt = null;
+      installBtn.style.display = 'none';
+    }
+  });
+
+  // Share Function
+  function shareApp() {
+    if (navigator.share) {
+      navigator.share({
+        title: 'Math Masti Quiz',
+        text: 'Doston ke saath Math sikhen!',
+        url: window.location.href
+      });
+    }
+  }
+</script>
+    
 </body>
 </html>
