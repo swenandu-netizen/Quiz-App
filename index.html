@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Maths Gallery - Final</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Titan+One&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#5b6af2">
     <style>
         body {
             margin: 0;
@@ -172,6 +174,14 @@
             }, 150);
         }
     </script>
-
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js')
+        .then(reg => console.log('Install feature active!'))
+        .catch(err => console.log('Registration failed', err));
+    });
+  }
+</script>
 </body>
 </html>
